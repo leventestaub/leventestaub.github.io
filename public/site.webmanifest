@@ -1,0 +1,14 @@
+{
+ "name": "Levente Staub",
+ "short_name": "L. Staub",
+ "icons": [
+  {
+   "src": "/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ],
+ "theme_color": "#E7E9E6",
+ "background_color": "#E7E9E6",
+ "display": "browser"
+}

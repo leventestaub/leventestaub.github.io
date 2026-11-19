@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="324pt" viewBox="0 0 576 324" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-19T20:48:32.433080</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 324 
+L 576 324 
+L 576 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 48.025156 297.699336 
+L 565.2 297.699336 
+L 565.2 33.918125 
+L 48.025156 33.918125 
+L 48.025156 297.699336 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m33b3a071d4" d="M 0 0 
+L 0 3.5 
+" style="stroke: #0b0c0c; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m33b3a071d4" x="144.488803" y="297.699336" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: middle; fill: #0b0c0c" x="144.488803" y="311.158008" transform="rotate(-0 144.488803 311.158008)">Before</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m33b3a071d4" x="468.736354" y="297.699336" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: middle; fill: #0b0c0c" x="468.736354" y="311.158008" transform="rotate(-0 468.736354 311.158008)">After</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_3">
+      <path d="M 48.025156 297.699336 
+L 565.2 297.699336 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <defs>
+       <path id="me8c40f7ef2" d="M 0 0 
+L -3.5 0 
+" style="stroke: #0b0c0c; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="297.699336" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="300.92834" transform="rotate(-0 41.025156 300.92834)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_5">
+      <path d="M 48.025156 268.390312 
+L 565.2 268.390312 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="268.390312" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="271.619316" transform="rotate(-0 41.025156 271.619316)">20</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_7">
+      <path d="M 48.025156 239.081289 
+L 565.2 239.081289 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="239.081289" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="242.310293" transform="rotate(-0 41.025156 242.310293)">40</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_9">
+      <path d="M 48.025156 209.772266 
+L 565.2 209.772266 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="209.772266" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="213.00127" transform="rotate(-0 41.025156 213.00127)">60</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_11">
+      <path d="M 48.025156 180.463242 
+L 565.2 180.463242 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="180.463242" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="183.692246" transform="rotate(-0 41.025156 183.692246)">80</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_13">
+      <path d="M 48.025156 151.154219 
+L 565.2 151.154219 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="151.154219" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="154.383223" transform="rotate(-0 41.025156 154.383223)">100</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_15">
+      <path d="M 48.025156 121.845195 
+L 565.2 121.845195 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="121.845195" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="125.074199" transform="rotate(-0 41.025156 125.074199)">120</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_17">
+      <path d="M 48.025156 92.536172 
+L 565.2 92.536172 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="92.536172" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="95.765176" transform="rotate(-0 41.025156 95.765176)">140</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_19">
+      <path d="M 48.025156 63.227148 
+L 565.2 63.227148 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_20">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="63.227148" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="66.456152" transform="rotate(-0 41.025156 66.456152)">160</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_21">
+      <path d="M 48.025156 33.918125 
+L 565.2 33.918125 
+" clip-path="url(#p57e916e266)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_22">
+      <g>
+       <use xlink:href="#me8c40f7ef2" x="48.025156" y="33.918125" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="41.025156" y="37.147129" transform="rotate(-0 41.025156 37.147129)">180</text>
+     </g>
+    </g>
+    <g id="text_13">
+     <text style="font-size: 10px; font-family: 'Host Grotesk Variable', 'Host Grotesk', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #0b0c0c" x="18.398438" y="165.80873" transform="rotate(-90 18.398438 165.80873)">EUR per month (estimate)</text>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 71.533104 297.699336 
+L 217.444502 297.699336 
+L 217.444502 74.950758 
+L 71.533104 74.950758 
+z
+" clip-path="url(#p57e916e266)" style="fill: #5b605d"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 395.780655 297.699336 
+L 541.692053 297.699336 
+L 541.692053 217.099521 
+L 395.780655 217.099521 
+z
+" clip-path="url(#p57e916e266)" style="fill: #efa23c"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 48.025156 297.699336 
+L 48.025156 33.918125 
+" style="fill: none; stroke: #0b0c0c; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 48.025156 297.699336 
+L 565.2 297.699336 
+" style="fill: none; stroke: #0b0c0c; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 9px; font-family: 'JetBrains Mono Variable'; text-anchor: middle; fill: #0b0c0c" x="144.488803" y="69.088953" transform="rotate(-0 144.488803 69.088953)">~152 EUR</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 9px; font-family: 'JetBrains Mono Variable'; text-anchor: middle; fill: #0b0c0c" x="468.736354" y="211.237717" transform="rotate(-0 468.736354 211.237717)">~55 EUR</text>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Host Grotesk Variable', 'Host Grotesk', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start; fill: #0b0c0c" x="48.025156" y="19.918125" transform="rotate(-0 48.025156 19.918125)">Cloud endpoint cost per month</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p57e916e266">
+   <rect x="48.025156" y="33.918125" width="517.174844" height="263.781211"/>
+  </clipPath>
+ </defs>
+</svg>

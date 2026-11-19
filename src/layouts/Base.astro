@@ -1,0 +1,99 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '@fontsource-variable/host-grotesk';
+import '@fontsource-variable/jetbrains-mono';
+import 'lenis/dist/lenis.css';
+import '../styles/base.css';
+
+interface Props { title: string; description?: string; tone?: 'light' | 'dark' }
+const { title, description = 'Levente Staub, machine learning engineering, MLOps and computer vision.', } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [ { href: '/work', label: 'Work' }, { href: '/about', label: 'About' }, { href: '/contact', label: 'Contact' } ];
+const current = (href: string) => path === href || path.startsWith(href + '/');
+// share card per page (tools/og.mjs); absolute URLs once `site` is set in astro.config
+const seg = path.split('/').filter(Boolean);
+const og = seg.length === 0 ? 'home' : seg[0] === 'work' ? (seg[1] ?? 'work') : ['about', 'contact'].includes(seg[0]) ? seg[0] : 'home';
+const abs = (u: string) => (Astro.site ? new URL(u, Astro.site).href : u);
+const ogImg = abs(`/og/${og}.jpg`);
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#E7E9E6" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  {Astro.site && <link rel="canonical" href={abs(Astro.url.pathname)} />}
+  <meta property="og:type" content={og === 'home' ? 'website' : 'article'} />
+  <meta property="og:site_name" content="Levente Staub" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImg} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  {Astro.site && <meta property="og:url" content={abs(Astro.url.pathname)} />}
+  <meta name="twitter:card" content="summary_large_image" />
+  <script is:inline>document.documentElement.classList.add('js')</script>
+  <ClientRouter fallback="swap" />
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+
+  <header class="nav" data-nav transition:persist="nav">
+    <a class="name" href="/" aria-label="Levente Staub, home"><span aria-hidden="true">L</span><span class="name-rest" aria-hidden="true">evente Staub</span></a>
+    <nav aria-label="Main">
+      <ul>
+        {links.map((l) => (
+          <li><a href={l.href} class:list={['link', { tick: current(l.href) }]} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a class="btn" href="/contact">Get in touch</a>
+    <button class="btn ghost nav-menu" type="button" aria-expanded="false" aria-controls="sheet" data-menu>Menu</button>
+  </header>
+  <div class="sheet" id="sheet" data-sheet hidden>
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  </div>
+
+  <main class="page" id="content">
+    <slot />
+  </main>
+
+  <footer class="dock dark ground" data-dock>
+    <canvas class="dither" data-dither aria-hidden="true"></canvas>
+    <div class="grid foot">
+      <div class="rail">
+        <span class="tick mono" data-tick>Get in touch</span>
+      </div>
+      <div class="main">
+        <p class="foot-line display">Let's build<br />something that lasts</p>
+        <ul class="foot-links">
+          <li><a class="link" href="/contact">Email</a></li>
+          <li><a class="link" href="https://github.com/leventestaub">GitHub</a></li>
+          <li><a class="link" href="https://www.linkedin.com/in/leventestaub/">LinkedIn</a></li>
+        </ul>
+        <p class="mono muted foot-meta">Breda, NL &nbsp; <span data-clock>--:--</span> CET</p>
+      </div>
+    </div>
+  </footer>
+
+  <style is:global>
+    .dock { display: flex; align-items: flex-end; overflow: hidden; }  /* content sets the height (user 2026-11-19: was min-height 78vh, left an empty band) */
+    .dither { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; image-rendering: pixelated; opacity: .5; }
+    .foot { width: 100%; padding-block: var(--s5) var(--s3); row-gap: var(--s3); }
+    .foot-line { font-size: clamp(44px, 6vw, 104px); }
+    .foot-links { list-style: none; margin: var(--s4) 0 var(--s2); padding: 0; display: flex; gap: var(--s4); font: 500 20px var(--sans); }
+    .foot-links a { text-decoration: none; }
+    .foot-meta { margin-top: var(--s2); }
+  </style>
+  <script>
+    import { boot } from '../scripts/motion.js';
+    boot();
+  </script>
+</body>
+</html>

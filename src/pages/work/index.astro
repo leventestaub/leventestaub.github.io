@@ -1,0 +1,198 @@
+---
+import Base from '../../layouts/Base.astro';
+import { work, focusAreas } from '../../data/work';
+// Work index = two parts (2026-11-19):
+// 1. Selected: Expanding Strip (Annnimate, rebuilt) for the featured 3-4. JS owns the open panel (.on): it follows the
+//    pointer with a settle lock, so a panel that grows under a still cursor cannot hand the hover to its neighbour.
+//    No JS: the first panel stays open. Touch, narrow and reduced motion: stacked cards, all open.
+// 2. Index: every project (Flip Filter idea): focus chips filter, grid/list toggle, cards fly to their new places.
+//    ?focus=<slug> in the URL preselects a chip, so a filtered link can be sent. Without JS: the full grid.
+const pad = (n: number) => String(n).padStart(2, '0');
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const featured = work.filter((p) => p.featured).slice(0, 4);
+const areas = focusAreas.filter((f) => work.some((p) => p.focus.includes(f)));
+const stack = (p: (typeof work)[number]) => p.rows.find(([k]) => k === 'Stack')?.[1] ?? '';
+---
+<Base title="Work, Levente Staub">
+  <section class="light ground windex">
+    <div class="grid whead">
+      <div class="rail"><span class="tick mono" data-tick>Work, {pad(work.length)} projects</span></div>
+      <div class="main whead-main">
+        <h1 class="display windex-h" data-chars>Work</h1>
+        <p class="lead whead-p">Models and the systems around them: training, evaluation, serving, retraining.</p>
+      </div>
+    </div>
+
+    <ul class="strip" data-strip aria-label="Selected projects">
+      {featured.map((p, i) => (
+        <li class:list={['panel', { on: i === 0 }]} data-panel>
+          <a class="panel-a" href={`/work/${p.slug}`} aria-label={`${p.title}: ${p.line}`}>
+            <figure class="dimg panel-img" style={`view-transition-name: cover-${p.slug}`}>
+              <img src={p.cover} style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" decoding="async" loading={i === 0 ? 'eager' : 'lazy'} />
+            </figure>
+            <span class="shade" aria-hidden="true"></span>
+            <span class="p-top mono"><span>{pad(i + 1)}</span><span>{p.year}</span></span>
+            <span class="p-label mono" aria-hidden="true">{p.title}</span>
+            <span class="p-body">
+              <span class="p-title h2">{p.title}</span>
+              <span class="p-line">{p.line}</span>
+              <span class="p-meta mono">
+                <span>{p.rows[0][1]}</span>
+                <span class="tick signal" data-tick>{p.result}</span>
+              </span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="light ground widx" aria-labelledby="idx-h" data-index-wrap>
+    <div class="grid idx-head">
+      <div class="rail"><span class="tick mono" data-tick>Index, {pad(work.length)}</span></div>
+      <div class="main idx-bar">
+        <h2 id="idx-h" class="h2">All projects</h2>
+        <div class="idx-ctrl">
+          <div class="chips" role="group" aria-label="Filter by focus">
+            <button type="button" class="chip mono" data-filter="all" aria-pressed="true">All <sup>{work.length}</sup></button>
+            {areas.map((f) => (
+              <button type="button" class="chip mono" data-filter={slug(f)} aria-pressed="false">
+                {f} <sup>{work.filter((p) => p.focus.includes(f)).length}</sup>
+              </button>
+            ))}
+          </div>
+          <div class="views" role="group" aria-label="Layout">
+            <button type="button" class="chip mono" data-view-btn="grid" aria-pressed="true">Grid</button>
+            <button type="button" class="chip mono" data-view-btn="list" aria-pressed="false">List</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="idx" data-index data-view="grid">
+      <li class="idx-cols mono muted" aria-hidden="true"><span>Year</span><span>Project</span><span>Task</span><span>Result</span></li>
+      {work.map((p) => (
+        <li class="it" data-item data-focus={p.focus.map(slug).join(' ')}>
+          <a class="it-a" href={`/work/${p.slug}`}>
+            <figure class="dimg it-img">
+              <img src={p.cover} style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" loading="lazy" decoding="async" />
+            </figure>
+            <span class="it-year mono muted">{p.year}</span>
+            <span class="it-title h3"><span class="it-u">{p.title}</span></span>
+            <span class="it-task">{p.rows[0][1]}</span>
+            <span class="it-stack mono muted">{stack(p)}</span>
+            <span class="it-res"><span class="tick signal mono" data-tick>{p.result}</span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="idx-empty mono muted" data-empty hidden>No projects with this focus yet.</p>
+  </section>
+</Base>
+
+<style>
+  .windex { padding: 150px 0 var(--s6); }
+  .whead { align-items: end; }
+  .whead-main { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--gutter); }
+  .windex-h { font-size: var(--t-hero); }
+  .whead-p { max-width: 28ch; padding-bottom: .6em; }
+
+  /* ---------- 1. strip: JS sets .on; flex-grow is the one layout property animated (3-4 panels, motion.md) ---------- */
+  .strip { list-style: none; display: flex; gap: 6px; margin: var(--s5) 0 0; padding: 0 var(--margin);
+    height: clamp(460px, 74vh, 820px); }
+  .panel { flex: 1 1 0; min-width: 0; position: relative; transition: flex-grow var(--d-m) var(--ease-inout); }
+  .panel.on { flex-grow: 3.4; }
+
+  .panel-a { position: absolute; inset: 0; display: block; overflow: hidden; color: var(--paper); text-decoration: none; background: var(--ink); }
+  .panel-a:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  .panel-img { position: absolute; inset: 0; height: 100%; }
+  .panel-img img { transform: scale(1.06); filter: brightness(.7) saturate(.75);
+    transition: transform var(--d-l) var(--ease-out), filter var(--d-m) var(--ease-out); }
+  .panel.on .panel-img img { transform: scale(1); filter: none; }
+  .shade { position: absolute; inset: 0; background: linear-gradient(to top, rgb(11 12 12 / .92), rgb(11 12 12 / .55) 34%, rgb(11 12 12 / 0) 62%); pointer-events: none; }
+  .p-top { position: absolute; top: 14px; left: 16px; right: 16px; display: flex; justify-content: space-between; }
+
+  .p-label { position: absolute; left: 16px; bottom: 18px; writing-mode: vertical-rl; transform: rotate(180deg);
+    white-space: nowrap; transition: opacity var(--d-s) var(--ease-snap); }
+  .panel.on .p-label { opacity: 0; }
+
+  .p-body { position: absolute; left: 20px; right: 20px; bottom: 20px; display: grid; gap: 10px; min-width: 300px; max-width: 46ch; }
+  .p-body > * { opacity: 0; transform: translateY(24px); transition: opacity var(--d-s) var(--ease-out), transform var(--d-m) var(--ease-out); }
+  .p-title { font-size: clamp(34px, 4.2vw, 72px); }
+  .p-line { font-size: 17px; line-height: 1.4; max-width: 40ch; }
+  .p-meta { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+  .panel.on .p-body > * { opacity: 1; transform: none; transition-delay: 220ms; }
+  .panel.on .p-body > :nth-child(2) { transition-delay: 300ms; }
+  .panel.on .p-body > :nth-child(3) { transition-delay: 380ms; }
+
+  @media (hover: none), (max-width: 820px), (prefers-reduced-motion: reduce) {
+    .whead-main { display: block; } .whead-p { margin-top: var(--s3); }
+    .strip { flex-direction: column; height: auto; gap: var(--s3); }
+    .panel, .panel.on { flex: none; aspect-ratio: 4 / 5; }
+    .panel-img img { transform: none; filter: none; }
+    .p-label { display: none; }
+    .p-body { min-width: 0; }
+    .p-body > * { opacity: 1; transform: none; transition: none; }
+  }
+  @media (max-width: 820px) and (min-width: 560px) { .panel, .panel.on { aspect-ratio: 16 / 11; } }
+
+  /* ---------- 2. index ---------- */
+  .widx { padding: var(--s6) 0 var(--s7); }
+  .idx-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--s3); }
+  .idx-ctrl { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); align-items: center; }
+  .chips, .views { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: var(--t-mono); padding: 8px 12px; border: 1px solid var(--line); background: transparent; color: var(--ink);
+    cursor: pointer; transition: background-color var(--d-xs) var(--ease-snap), color var(--d-xs) var(--ease-snap), border-color var(--d-xs); }
+  .chip sup { font-size: .8em; opacity: .6; margin-left: 2px; }
+  .chip:hover { border-color: var(--ink); }
+  .chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .idx { list-style: none; margin: var(--s5) 0 0; padding: 0 var(--margin); }
+  .idx-cols { display: none; }
+
+  /* grid view */
+  .idx[data-view='grid'] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5) var(--gutter); }
+  .idx[data-view='grid'] .it-a { display: grid; gap: 8px; color: var(--ink); text-decoration: none;
+    grid-template-columns: 1fr auto; grid-template-areas: 'img img' 'title year' 'task task' 'stack stack' 'res res'; }
+  .it-img { aspect-ratio: 16 / 10; overflow: hidden; margin: 0 0 8px; background: var(--ink); }
+  .idx[data-view='grid'] .it-img { grid-area: img; } .idx[data-view='grid'] .it-year { grid-area: year; } .idx[data-view='grid'] .it-title { grid-area: title; }
+  .idx[data-view='grid'] .it-task { grid-area: task; } .idx[data-view='grid'] .it-stack { grid-area: stack; } .idx[data-view='grid'] .it-res { grid-area: res; }
+  .it-img img { transition: transform var(--d-l) var(--ease-out); }
+  .it-a:hover .it-img img, .it-a:focus-visible .it-img img { transform: scale(1.03); }
+  .it-year { align-self: baseline; }
+  .it-title { margin: 0; }
+  .it-task { font-size: 17px; line-height: 1.4; }
+  .it-stack { }
+  .it-res { margin-top: 4px; }
+  .it-u { background: linear-gradient(currentColor, currentColor) left bottom / 0% 1.5px no-repeat; transition: background-size var(--d-s) var(--ease-snap); }
+  .it-a:hover .it-u, .it-a:focus-visible .it-u { background-size: 100% 1.5px; }
+  .it-a:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+
+  /* list view: a scan table for recruiters */
+  .idx[data-view='list'] { display: block; }
+  .idx[data-view='list'] .idx-cols, .idx[data-view='list'] .it-a {
+    display: grid; grid-template-columns: 6.5rem minmax(0, 2fr) minmax(0, 3fr) minmax(0, 2.2fr); gap: var(--gutter); align-items: baseline; }
+  .idx[data-view='list'] .idx-cols { padding-bottom: 10px; }
+  .idx[data-view='list'] .it { border-top: 1px solid var(--line); }
+  .idx[data-view='list'] .it:last-child { border-bottom: 1px solid var(--line); }
+  .idx[data-view='list'] .it-a { padding: 18px 0; color: var(--ink); text-decoration: none;
+    transition: padding var(--d-s) var(--ease-out); }
+  .idx[data-view='list'] .it-img, .idx[data-view='list'] .it-stack { display: none; }
+  .idx[data-view='list'] .it-year { order: 0; } .idx[data-view='list'] .it-title { order: 1; }
+  .idx[data-view='list'] .it-task { order: 2; } .idx[data-view='list'] .it-res { order: 3; margin: 0; justify-self: end; }
+  .idx[data-view='list'] .it-a:hover { padding-left: 12px; }
+
+  .it.out { display: none; }
+  .idx-empty { padding: var(--s4) var(--margin); }
+
+  @media (max-width: 1024px) { .idx[data-view='grid'] { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 620px) {
+    .idx[data-view='grid'] { grid-template-columns: 1fr; }
+    .idx[data-view='list'] .idx-cols { display: none; }
+    .idx[data-view='list'] .it-a { grid-template-columns: 1fr auto; row-gap: 4px; }
+    .idx[data-view='list'] .it-year { order: 2; } .idx[data-view='list'] .it-title { order: 0; }
+    .idx[data-view='list'] .it-task { order: 3; grid-column: 1 / -1; } .idx[data-view='list'] .it-res { order: 4; grid-column: 1 / -1; justify-self: start; margin-top: 6px; }
+  }
+  @media (max-width: 820px) { .widx { padding-top: var(--s5); } }
+</style>

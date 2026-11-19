@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+# source photos (originals live in portfolio-details/src-photos)
+/DSC*.jpg
+/*.mov
+
+# local tooling (headless Chrome profiles, check output)
+.taste-skill/

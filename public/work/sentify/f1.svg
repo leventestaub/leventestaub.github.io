@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="324pt" viewBox="0 0 576 324" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-19T20:48:32.375016</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 324 
+L 576 324 
+L 576 0 
+L 0 0 
+L 0 324 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 45.317656 285.795352 
+L 565.2 285.795352 
+L 565.2 33.918125 
+L 45.317656 33.918125 
+L 45.317656 285.795352 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="mb593604590" d="M 0 0 
+L 0 3.5 
+" style="stroke: #0b0c0c; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mb593604590" x="147.718724" y="285.795352" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; fill: #0b0c0c" transform="translate(116.742865 300.104189)">Cross-entropy,</text>
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; fill: #0b0c0c" transform="translate(114.466458 310.306514)">default settings</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#mb593604590" x="462.798932" y="285.795352" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; fill: #0b0c0c" transform="translate(421.694128 300.104854)">Focal loss, AdamW,</text>
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; fill: #0b0c0c" transform="translate(422.50694 310.307178)">lower learning rate</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_3">
+      <path d="M 45.317656 285.795352 
+L 565.2 285.795352 
+" clip-path="url(#p7476504dea)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <defs>
+       <path id="m2541733499" d="M 0 0 
+L -3.5 0 
+" style="stroke: #0b0c0c; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m2541733499" x="45.317656" y="285.795352" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="38.317656" y="289.024355" transform="rotate(-0 38.317656 289.024355)">0.0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_5">
+      <path d="M 45.317656 235.419906 
+L 565.2 235.419906 
+" clip-path="url(#p7476504dea)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m2541733499" x="45.317656" y="235.419906" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="38.317656" y="238.64891" transform="rotate(-0 38.317656 238.64891)">0.2</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_7">
+      <path d="M 45.317656 185.044461 
+L 565.2 185.044461 
+" clip-path="url(#p7476504dea)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m2541733499" x="45.317656" y="185.044461" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="38.317656" y="188.273465" transform="rotate(-0 38.317656 188.273465)">0.4</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_9">
+      <path d="M 45.317656 134.669016 
+L 565.2 134.669016 
+" clip-path="url(#p7476504dea)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m2541733499" x="45.317656" y="134.669016" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="38.317656" y="137.89802" transform="rotate(-0 38.317656 137.89802)">0.6</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_11">
+      <path d="M 45.317656 84.29357 
+L 565.2 84.29357 
+" clip-path="url(#p7476504dea)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m2541733499" x="45.317656" y="84.29357" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="38.317656" y="87.522574" transform="rotate(-0 38.317656 87.522574)">0.8</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_13">
+      <path d="M 45.317656 33.918125 
+L 565.2 33.918125 
+" clip-path="url(#p7476504dea)" style="fill: none; stroke: #c9cdc9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#m2541733499" x="45.317656" y="33.918125" style="fill: #0b0c0c; stroke: #0b0c0c; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 8.5px; font-family: 'JetBrains Mono Variable'; text-anchor: end; fill: #0b0c0c" x="38.317656" y="37.147129" transform="rotate(-0 38.317656 37.147129)">1.0</text>
+     </g>
+    </g>
+    <g id="text_9">
+     <text style="font-size: 10px; font-family: 'Host Grotesk Variable', 'Host Grotesk', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: middle; fill: #0b0c0c" x="18.397656" y="159.856738" transform="rotate(-90 18.397656 159.856738)">Macro F1</text>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 68.948672 285.795352 
+L 226.488776 285.795352 
+L 226.488776 182.525689 
+L 68.948672 182.525689 
+z
+" clip-path="url(#p7476504dea)" style="fill: #5b605d"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 384.02888 285.795352 
+L 541.568984 285.795352 
+L 541.568984 74.218481 
+L 384.02888 74.218481 
+z
+" clip-path="url(#p7476504dea)" style="fill: #efa23c"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 45.317656 285.795352 
+L 45.317656 33.918125 
+" style="fill: none; stroke: #0b0c0c; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 45.317656 285.795352 
+L 565.2 285.795352 
+" style="fill: none; stroke: #0b0c0c; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 9px; font-family: 'JetBrains Mono Variable'; text-anchor: middle; fill: #0b0c0c" x="147.718724" y="177.488144" transform="rotate(-0 147.718724 177.488144)">0.41</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 9px; font-family: 'JetBrains Mono Variable'; text-anchor: middle; fill: #0b0c0c" x="462.798932" y="69.180937" transform="rotate(-0 462.798932 69.180937)">0.84</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'Host Grotesk Variable', 'Host Grotesk', 'DejaVu Sans', 'Bitstream Vera Sans', 'Computer Modern Sans Serif', 'Lucida Grande', 'Verdana', 'Geneva', 'Lucid', 'Arial', 'Helvetica', 'Avant Garde', sans-serif; text-anchor: start; fill: #0b0c0c" x="45.317656" y="19.918125" transform="rotate(-0 45.317656 19.918125)">Macro F1 on the emotion classifier</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p7476504dea">
+   <rect x="45.317656" y="33.918125" width="519.882344" height="251.877227"/>
+  </clipPath>
+ </defs>
+</svg>
