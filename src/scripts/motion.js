@@ -29,13 +29,16 @@ function initScroll() {
 function initNav() {
   const nav = document.querySelector('[data-nav]');
   const btn = document.querySelector('[data-menu]');
-  let last = 0;
+  let last = 0, run = 0;   // run = distance scrolled in the current direction
   const onScroll = () => {
-    const y = scrollY;
+    // clamp: iOS rubber-band and momentum report overshoot and tiny reverse steps, which flipped the bar back and forth
+    const y = Math.max(0, Math.min(scrollY, document.documentElement.scrollHeight - innerHeight));
     nav.classList.toggle('pill', y > 80);
-    if (!reduce.matches) nav.classList.toggle('away', y > last + 6 && y > 400 && !nav.classList.contains('open'));
-    if (y < last - 2) nav.classList.remove('away');
-    last = y;
+    const d = y - last; last = y;
+    if (!d) return;
+    run = Math.sign(d) === Math.sign(run) ? run + d : d;
+    if (y < 400 || run < -24 || reduce.matches) nav.classList.remove('away');
+    else if (run > 24 && !nav.classList.contains('open')) nav.classList.add('away');
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
   const setMenu = (open) => {
