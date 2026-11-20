@@ -230,8 +230,8 @@ const filters = [{ id: 'reeds', g: glass }];
   // reduced motion: keep the poster, never play
   const v = document.querySelector("[data-hero-video]");
   if (v && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
-  // reeds follow the frame: ~18 across (the baked video's density), never wider than the 30 px set above;
-  // distortion and seam blur scale with them, so mid-size screens keep the same look as phones and large monitors
+  // reeds follow the frame: distortion and seam blur scale with them, so laptops and mid-size screens
+  // keep the same proportions as a large monitor
   // runs on every visit (ClientRouter swaps in a fresh filter), once per filter element
   document.addEventListener("astro:page-load", () => {
   const fl = document.getElementById("reeds"), frame = document.querySelector("[data-hero-media]");
@@ -241,7 +241,8 @@ const filters = [{ id: 'reeds', g: glass }];
     const base = { reed: +img.getAttribute("width"), scale: +disp.getAttribute("scale"),
       smooth: parseFloat(smooth.getAttribute("stdDeviation")), soft: +soft.getAttribute("stdDeviation") };
     const fit = () => {
-      const k = Math.min(1, frame.clientWidth / 18.3 / base.reed);
+      // the large-monitor look (30 px reeds on the ~950 px frame of a 2560 px wide window, ~32 across) scaled down; reeds never under 12 px
+      const k = Math.min(1, Math.max(12 / base.reed, frame.clientWidth / 950));
       img.setAttribute("width", (base.reed * k).toFixed(2));
       disp.setAttribute("scale", (base.scale * k).toFixed(2));
       smooth.setAttribute("stdDeviation", `${(base.smooth * k).toFixed(2)} 0`);
