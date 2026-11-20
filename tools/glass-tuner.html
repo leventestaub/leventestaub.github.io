@@ -1,0 +1,215 @@
+<!doctype html>
+<!-- Reeded-glass tuner: the same maths as tools/bake_reeds.py, live in WebGL, inside a stub phone.
+     Serve the repo root over http (video textures need it), then open /tools/glass-tuner.html:
+       uv run --no-project python -m http.server 8137      ->  http://localhost:8137/tools/glass-tuner.html -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glass tuner</title>
+<style>
+  :root { --paper: #E7E9E6; --ink: #0B0C0C; --line: #c9ccc8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, sans-serif; background: #cfd2ce; color: var(--ink);
+    display: grid; grid-template-columns: 340px 1fr; min-height: 100vh; }
+  aside { background: var(--paper); border-right: 1px solid var(--line); padding: 20px; overflow: auto; }
+  h1 { font-size: 16px; margin: 0 0 4px; } .hint { color: #555; font-size: 12px; margin: 0 0 16px; }
+  .knob { margin-bottom: 14px; } .knob label { display: flex; justify-content: space-between; font-weight: 600; }
+  .knob small { display: block; color: #666; font-weight: 400; margin-bottom: 4px; }
+  .knob input[type=range] { width: 100%; } .knob output { font-variant-numeric: tabular-nums; }
+  fieldset { border: 1px solid var(--line); border-radius: 6px; margin: 0 0 16px; padding: 10px 12px; }
+  legend { font-weight: 700; padding: 0 4px; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  button { font: inherit; padding: 6px 10px; border: 1px solid var(--ink); background: transparent; border-radius: 99px; cursor: pointer; }
+  button:hover { background: var(--ink); color: var(--paper); }
+  pre { background: #fff; border: 1px solid var(--line); padding: 8px; font-size: 11px; white-space: pre-wrap; word-break: break-all; margin: 6px 0; }
+  main { display: flex; gap: 40px; align-items: flex-start; justify-content: center; padding: 32px; flex-wrap: wrap; }
+  .cap { font-size: 12px; color: #444; text-align: center; margin-top: 8px; }
+  /* stub phone */
+  .phone { width: var(--pw, 390px); height: 844px; background: var(--paper); border-radius: 44px; overflow: hidden; position: relative;
+    box-shadow: 0 0 0 10px #111, 0 30px 60px rgba(0,0,0,.25); padding: 96px 20px 0; }
+  .pill { position: absolute; top: 12px; left: 46px; right: 46px; height: 52px; border-radius: 99px; background: rgba(220,223,219,.9);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 8px 0 20px; font-weight: 600; }
+  .pill span { background: var(--ink); color: var(--paper); border-radius: 99px; padding: 8px 16px; font-size: 14px; }
+  .h { font-size: clamp(44px, calc(var(--pw, 390px) * .124), 80px); line-height: .9; font-weight: 700; letter-spacing: -.02em; margin: 0 0 24px; }
+  .copy { font-size: 16px; margin: 24px 0; }
+  /* frame: same geometry as the site (frame-media bleeds 10%, the video is 88% of it, so it overshoots the frame by 2.8%) */
+  .frame { position: relative; aspect-ratio: 1; background: #101312; overflow: hidden; }
+  .frame canvas { position: absolute; left: -2.8%; top: -2.8%; width: 105.6%; height: 105.6%; }
+  .grain { position: absolute; inset: -50%; pointer-events: none; opacity: var(--go, .12); mix-blend-mode: screen;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>"); }
+  .grain.move { animation: grain var(--gs, .5s) steps(4) infinite; }
+  @keyframes grain { 0% { transform: translate(0, 0); } 25% { transform: translate(-7%, 4%); } 50% { transform: translate(5%, -6%); } 75% { transform: translate(-3%, -2%); } }
+  .desk { width: 550px; } .desk[hidden] { display: none; }
+</style>
+</head>
+<body>
+<aside>
+  <h1>Glass tuner</h1>
+  <p class="hint">Same maths as <code>bake_reeds.py</code>, in video pixels (the video is 1080 px, shown at about 370 px on a phone). Hold <b>B</b> to see the plain video, press <b>space</b> to pause.</p>
+
+  <div class="row" id="presets"></div>
+
+  <fieldset><legend>Glass</legend><div id="glass"></div></fieldset>
+  <fieldset><legend>Grain</legend><div id="grainK"></div>
+    <label><input type="checkbox" id="gmove"> grain moves</label>
+  </fieldset>
+  <fieldset><legend>View</legend><div id="viewK"></div>
+    <label><input type="checkbox" id="showDesk"> also show the desktop frame (550 px)</label>
+  </fieldset>
+
+  <b>Bake this as the phone video</b>
+  <pre id="cmd"></pre>
+  <b>Phone grain CSS</b>
+  <pre id="css"></pre>
+  <div class="row"><button id="copy">Copy both</button><button id="link">Copy link to this setting</button></div>
+</aside>
+
+<main>
+  <div>
+    <div class="phone" id="phone">
+      <div class="pill">L <span>Get in touch</span></div>
+      <p class="h">Learning to build ML that lasts</p>
+      <div class="frame"><canvas id="c1"></canvas><span class="grain" id="g1"></span></div>
+      <p class="copy">Final-year Applied Data Science and AI student in Breda. I train models and build the tests, pipelines and deployments around them.</p>
+    </div>
+    <div class="cap">stub phone</div>
+  </div>
+  <div class="desk" id="desk" hidden>
+    <div class="frame"><canvas id="c2"></canvas><span class="grain move" id="g2"></span></div>
+    <div class="cap">desktop frame at 1440 (same knobs; the live desktop uses its own preset)</div>
+  </div>
+</main>
+
+<video id="v" src="../public/hero/silhouette.mp4" muted loop playsinline autoplay crossorigin="anonymous" hidden></video>
+
+<script>
+const KNOBS = [
+  ['glass', 'scale',  'Distortion', 'how far each reed bends the image (max shift = scale/2 px)', 0, 80, .5],
+  ['glass', 'smooth', 'Smoothness', 'blurs the seams between reeds; higher = softer, less glass', 0, 20, .5],
+  ['glass', 'tilt',   'Vertical misalignment', 'diagonal pull: each reed shifts up/down by up to tilt*scale px', 0, .6, .01],
+  ['glass', 'reed',   'Reed width', 'px per reed in the 1080 video (59 = about 20 css px on a phone)', 16, 140, 1],
+  ['glass', 'soft',   'Pre-blur', 'blurs the footage before the glass; hides fine detail and noise', 0, 6, .1],
+  ['grainK', 'go',    'Grain strength', 'opacity of the noise layer', 0, .4, .01],
+  ['grainK', 'gs',    'Grain jump period (s)', 'one cycle of 4 jumps; only when moving', .2, 3, .1],
+  ['viewK', 'pw',     'Phone width (css px)', '', 340, 440, 1],
+];
+const PRESETS = {
+  'phone now':  { reed: 59, scale: 32, smooth: 9, soft: 2.4, tilt: .10, go: .12, gmove: false },
+  'phone E':    { reed: 59, scale: 38, smooth: 7, soft: 2.4, tilt: .25, go: .22, gmove: true },
+  'desktop':    { reed: 59, scale: 51, smooth: 6, soft: 2.4, tilt: .35, go: .22, gmove: true },
+  'no glass':   { reed: 59, scale: 0,  smooth: 0, soft: 0,   tilt: 0,   go: .12, gmove: false },
+};
+const S = { reed: 59, scale: 32, smooth: 9, soft: 2.4, tilt: .10, go: .12, gs: .5, gmove: false, pw: 390, desk: false };
+try { Object.assign(S, JSON.parse(decodeURIComponent(location.hash.slice(1)))); } catch {}
+
+const inputs = {};
+for (const [box, k, name, help, min, max, step] of KNOBS) {
+  const d = document.createElement('div'); d.className = 'knob';
+  d.innerHTML = `<label>${name}<output></output></label>${help ? `<small>${help}</small>` : ''}<input type="range" min="${min}" max="${max}" step="${step}">`;
+  const r = d.querySelector('input'); r.value = S[k];
+  r.oninput = () => { S[k] = +r.value; sync(); };
+  inputs[k] = r; document.getElementById(box).append(d);
+}
+for (const [n, p] of Object.entries(PRESETS)) {
+  const b = document.createElement('button'); b.textContent = n;
+  b.onclick = () => { Object.assign(S, p); for (const k in inputs) inputs[k].value = S[k]; sync(); };
+  document.getElementById('presets').append(b);
+}
+const gmove = document.getElementById('gmove'), showDesk = document.getElementById('showDesk');
+gmove.onchange = () => { S.gmove = gmove.checked; sync(); };
+showDesk.onchange = () => { S.desk = showDesk.checked; sync(); };
+
+// --- WebGL: video texture (pre-blurred in a 2D canvas) + a 1-row texture holding the blurred sawtooth R(x)
+const v = document.getElementById('v');
+const W = 1080, H = 1080;
+const pre = Object.assign(document.createElement('canvas'), { width: W, height: H });
+const pctx = pre.getContext('2d');
+function makeGL(canvas) {
+  canvas.width = W; canvas.height = H;
+  const gl = canvas.getContext('webgl', { premultipliedAlpha: false });
+  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; };
+  const pr = gl.createProgram();
+  gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 a; varying vec2 v; void main(){ v = vec2(a.x*.5+.5, .5-a.y*.5); gl_Position = vec4(a,0,1); }'));
+  gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, `precision highp float; varying vec2 v;
+    uniform sampler2D vid, rt; uniform float scale, tilt, plain; const vec2 S = vec2(${W}.0, ${H}.0);
+    void main(){ vec2 p = v * S;
+      vec4 e = texture2D(rt, vec2((floor(p.x) + .5) / S.x, .5)); float R = (e.r * 255. * 256. + e.g * 255.) / 65535.;
+      float G = .5 - tilt * .5 + tilt * R;
+      vec2 c = clamp(p + (1. - plain) * scale * vec2(R - .5, G - .5), vec2(.5), S - .5);
+      gl_FragColor = vec4(texture2D(vid, c / S).rgb, 1.); }`));
+  gl.linkProgram(pr); gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const a = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+  const tex = (unit) => { const t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
+    for (const [k, val] of [[gl.TEXTURE_MIN_FILTER, unit ? gl.NEAREST : gl.LINEAR], [gl.TEXTURE_MAG_FILTER, unit ? gl.NEAREST : gl.LINEAR],
+      [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, val); return t; };
+  const tv = tex(0), tr = tex(1);
+  gl.uniform1i(gl.getUniformLocation(pr, 'vid'), 0); gl.uniform1i(gl.getUniformLocation(pr, 'rt'), 1);
+  const u = n => gl.getUniformLocation(pr, n);
+  return { gl, tv, tr, uScale: u('scale'), uTilt: u('tilt'), uPlain: u('plain') };
+}
+const views = [makeGL(document.getElementById('c1')), makeGL(document.getElementById('c2'))];
+
+function reedMap() {           // the same R as bake_reeds.py: per-reed sawtooth, gaussian-blurred with wrap
+  const reed = Math.round(S.reed), t = Float64Array.from({ length: W }, (_, x) => (x % reed) / (reed - 1));
+  let R = t;
+  if (S.smooth > 0) {
+    const sig = S.smooth, rad = Math.ceil(4 * sig), k = [];
+    for (let i = -rad; i <= rad; i++) k.push(Math.exp(-i * i / (2 * sig * sig)));
+    const ks = k.reduce((a, b) => a + b);
+    R = new Float64Array(W);
+    for (let x = 0; x < W; x++) { let s = 0; for (let i = -rad; i <= rad; i++) s += k[i + rad] * t[((x + i) % W + W) % W]; R[x] = s / ks; }
+  }
+  const px = new Uint8Array(W * 4);
+  for (let x = 0; x < W; x++) { const q = Math.round(Math.min(1, Math.max(0, R[x])) * 65535); px[x * 4] = q >> 8; px[x * 4 + 1] = q & 255; px[x * 4 + 3] = 255; }
+  for (const V of views) { V.gl.activeTexture(V.gl.TEXTURE1); V.gl.bindTexture(V.gl.TEXTURE_2D, V.tr);
+    V.gl.texImage2D(V.gl.TEXTURE_2D, 0, V.gl.RGBA, W, 1, 0, V.gl.RGBA, V.gl.UNSIGNED_BYTE, px); }
+}
+
+let plain = 0, lastMap = '';
+function draw() {
+  if (v.readyState >= 2) {
+    pctx.filter = S.soft > 0 ? `blur(${S.soft}px)` : 'none';
+    pctx.drawImage(v, 0, 0, W, H);
+    const key = `${S.reed}|${S.smooth}`; if (key !== lastMap) { reedMap(); lastMap = key; }
+    for (const V of views) { if (V === views[1] && !S.desk) continue;
+      const gl = V.gl; gl.viewport(0, 0, W, H);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, V.tv);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pre);
+      gl.uniform1f(V.uScale, S.scale); gl.uniform1f(V.uTilt, S.tilt); gl.uniform1f(V.uPlain, plain);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
+  }
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+v.play().catch(() => document.body.addEventListener('click', () => v.play(), { once: true }));
+
+function sync() {
+  for (const [box, k] of KNOBS) inputs[k].parentNode.querySelector('output').textContent = S[k];
+  gmove.checked = S.gmove; showDesk.checked = S.desk;
+  const g1 = document.getElementById('g1'); g1.classList.toggle('move', S.gmove);
+  document.documentElement.style.setProperty('--go', S.go);
+  document.documentElement.style.setProperty('--gs', S.gs + 's');
+  document.getElementById('phone').style.setProperty('--pw', S.pw + 'px');
+  document.getElementById('desk').hidden = !S.desk;
+  document.getElementById('cmd').textContent =
+    `uv run --no-project --with imageio[ffmpeg] --with scipy --with numpy python tools/bake_reeds.py phone --reed=${S.reed} --scale=${S.scale} --smooth=${S.smooth} --soft=${S.soft} --tilt=${S.tilt}`;
+  document.getElementById('css').textContent = S.gmove
+    ? `.grain { opacity: ${S.go}; animation-duration: ${S.gs}s; }`
+    : `.grain { animation: none; opacity: ${S.go}; }`;
+  history.replaceState(null, '', '#' + encodeURIComponent(JSON.stringify(S)));
+}
+sync();
+
+document.getElementById('copy').onclick = () => navigator.clipboard.writeText(
+  `phone glass: reed=${S.reed} scale=${S.scale} smooth=${S.smooth} soft=${S.soft} tilt=${S.tilt}\n` +
+  document.getElementById('cmd').textContent + '\n' + document.getElementById('css').textContent);
+document.getElementById('link').onclick = () => navigator.clipboard.writeText(location.href);
+addEventListener('keydown', e => { if (e.target.tagName === 'INPUT' && e.target.type !== 'range') return;
+  if (e.key === 'b' || e.key === 'B') plain = 1;
+  if (e.code === 'Space') { e.preventDefault(); v.paused ? v.play() : v.pause(); } });
+addEventListener('keyup', e => { if (e.key === 'b' || e.key === 'B') plain = 0; });
+</script>
+</body>
+</html>

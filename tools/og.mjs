@@ -34,7 +34,7 @@ fs.writeFileSync(path.join(PUB, 'site.webmanifest'), JSON.stringify({ name: 'Lev
 
 // ---- share cards ---------------------------------------------------------------------------------
 const cards = [
-  { name: 'home', tick: 'Portfolio', title: 'Levente Staub', line: 'Machine learning engineering, MLOps and computer vision.' },
+  { name: 'home', tick: 'Portfolio', title: 'Learning to build ML that lasts', line: 'Levente Staub. Machine learning engineering, MLOps and computer vision.', img: '/hero/silhouette-reeds-poster.jpg' },
   { name: 'work', tick: 'Work', title: 'Selected work', line: `${work.length} projects in computer vision, ML engineering, MLOps and LLMs.` },
   { name: 'about', tick: 'About', title: 'About', line: 'Data Science and AI student at BUas, looking for a graduation internship from February 2027.' },
   { name: 'contact', tick: 'Contact', title: 'Get in touch', line: 'Graduation internship from February 2027.' },

@@ -54,37 +54,6 @@ function initNav() {
   document.addEventListener('click', (e) => e.target.closest?.('[data-sheet] a') && setMenu(false));   // also closes on a link to the current page
 }
 
-/* ---------- ASCII ground texture: one seamless tile of faint JetBrains Mono glyphs, drawn once ---------- */
-function asciiTexture() {
-  const root = document.documentElement;
-  if (root.style.getPropertyValue('--tex-l')) return;
-  const CW = 8, CH = 14, COLS = 40, ROWS = 24, W = CW * COLS, H = CH * ROWS, DPR = 2;
-  const RAMP = '.·:-=+*#';
-  let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  // periodic value noise (lattice wraps, so the tile repeats without seams)
-  const LX = 8, LY = 6, lat = Array.from({ length: LX * LY }, rnd);
-  const at = (i, j) => lat[((j % LY) + LY) % LY * LX + ((i % LX) + LX) % LX];
-  const sm = (t) => t * t * (3 - 2 * t);
-  const noise = (x, y) => { const i = Math.floor(x), j = Math.floor(y), u = sm(x - i), v = sm(y - j);
-    const a = at(i, j) + (at(i + 1, j) - at(i, j)) * u, b = at(i, j + 1) + (at(i + 1, j + 1) - at(i, j + 1)) * u; return a + (b - a) * v; };
-  const cells = [];
-  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
-    const v = noise((c / COLS) * LX, (r / ROWS) * LY) * 0.75 + rnd() * 0.25;
-    const k = Math.floor(((v - 0.5) / 0.5) * RAMP.length);
-    if (k >= 0) cells.push([c, r, RAMP[Math.min(k, RAMP.length - 1)], v]);
-  }
-  const tile = (rgb, alpha) => {
-    const cv = document.createElement('canvas'); cv.width = W * DPR; cv.height = H * DPR;
-    const g = cv.getContext('2d'); g.scale(DPR, DPR);
-    g.font = '400 10px "JetBrains Mono Variable", monospace'; g.textBaseline = 'top';
-    cells.forEach(([c, r, ch, v]) => { g.fillStyle = `rgba(${rgb},${(alpha * (0.5 + v * 0.5)).toFixed(3)})`; g.fillText(ch, c * CW, r * CH); });
-    return `url(${cv.toDataURL('image/png')})`;
-  };
-  root.style.setProperty('--tex-l', tile('11,12,12', 0.12));
-  root.style.setProperty('--tex-d', tile('231,233,230', 0.10));
-  root.style.setProperty('--tex-w', `${W}px`); root.style.setProperty('--tex-h', `${H}px`);
-}
-
 /* ---------- button fill enters from the cursor side ---------- */
 function initButtons(root) {
   const on = (e) => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty('--from', e.clientX < r.left + r.width / 2 ? '-101%' : '101%'); };
@@ -398,7 +367,7 @@ function clock() {
 /* ---------- per page ---------- */
 async function page() {
   await document.fonts.ready; // split only after the webfont, so lines don't reflow
-  asciiTexture(); initButtons(document); initTicks(document); clock(); ditherField(); copyEmail(); workIndex();
+  initButtons(document); initTicks(document); clock(); ditherField(); copyEmail(); workIndex();
   if (reduce.matches) { glassTwin(); return; } // static states already complete
   expandingStrip();
   ctx = gsap.context(() => { charAppear(); textReveal(); sideArrival(); stackCards(); cardExpand(); pixelEdge();

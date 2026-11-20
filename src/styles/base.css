@@ -14,13 +14,13 @@ h1, h2, h3, p { margin: 0; }
 .skip:focus { top: 12px; }
 
 /* ---------- grounds + ASCII texture (static, faint mono glyphs on every ground) ----------
-   motion.js draws the tile once (after the webfont) and sets --tex-l / --tex-d; until then, and without JS, the ground is flat. */
+   pre-rendered 2x tiles (public/tex-l.webp, tex-d.webp; JetBrains Mono glyphs), so no runtime canvas work. */
 .ground { position: relative; isolation: isolate; }
 .ground::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: var(--tex-l, none) repeat; background-size: var(--tex-w, 0) var(--tex-h, 0); }
+  background: url(/tex-l.webp) repeat; background-size: 320px 336px; }
 .light { background-color: var(--paper); color: var(--ink); }
 .dark  { background-color: var(--ink); color: var(--paper); }
-.dark::before { background-image: var(--tex-d, none); }
+.dark::before { background-image: url(/tex-d.webp); }
 .clean { background: var(--paper-2); } /* panels for UI, charts, long text: no grain */
 
 /* ---------- grid ---------- */

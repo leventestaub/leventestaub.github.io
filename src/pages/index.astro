@@ -16,15 +16,17 @@ const glass = {
   soft: 1.2,     // blur of the image before refraction, px
   tilt: 0.35,    // refraction direction: 0 = purely sideways; >0 pulls diagonally (down-right), <0 up-right
 };
-// phone frame (~350 px) is about 2/3 of the desktop one (~520 px at 1440): the same look needs 2/3 of the px
-const glassSm = { ...glass, reed: 20, scale: 17, smooth: 2, soft: 0.8 };
+// phones: no live filter, they play the reeds baked in (tools/bake_reeds.py, preset 'phone': gentler than desktop)
 const hex = (v: number) => Math.round(Math.max(0, Math.min(1, v)) * 255).toString(16).padStart(2, '0');
 const g0 = hex(0.5 - glass.tilt / 2), g1 = hex(0.5 + glass.tilt / 2);
 const map = (w: number) => `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='600'><defs><linearGradient id='g'><stop offset='0' stop-color='%2300${g0}00'/><stop offset='1' stop-color='%23ff${g1}00'/></linearGradient></defs><rect width='${w}' height='600' fill='url(%23g)'/></svg>`;
-const filters = [{ id: 'reeds', g: glass }, { id: 'reeds-sm', g: glassSm }];
+const filters = [{ id: 'reeds', g: glass }];
 ---
 <Base title="Levente Staub, machine learning engineer">
-  <!-- reeded-glass filters, used only in the hero frame (reeds-sm under 820 px) -->
+  <!-- the hero poster is the LCP: fetch it early, one per breakpoint -->
+  <link slot="head" rel="preload" as="image" href="/hero/silhouette-reeds-sm-poster.jpg" media="(max-width: 820px)" fetchpriority="high" />
+  <link slot="head" rel="preload" as="image" href="/hero/silhouette-poster.jpg" media="(min-width: 821px)" fetchpriority="high" />
+  <!-- reeded-glass filter, used only in the hero frame on desktop -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     {filters.map(({ id, g }) => (
       <filter id={id} x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
@@ -55,14 +57,17 @@ const filters = [{ id: 'reeds', g: glass }, { id: 'reeds-sm', g: glassSm }];
           <!-- MEDIA SLOT (not locked): footage behind glass, or a cut of project outputs. Stand-in below. -->
           <div class="frame-media" aria-hidden="true">
             <!-- DEMO (2026-11-19): test take as a silhouette, square crop round the subject, 8.75 s loop at 0.8x speed; built by tools/hero-video.sh. Compare: ?look=dither4 | ?look=demo -->
-            <video class="hero-video" src="/hero/silhouette.mp4" poster="/hero/silhouette-poster.jpg" muted loop playsinline autoplay preload="auto" data-hero-video></video>
+            <!-- glass: desktop Chrome/Edge/Firefox use the live #reeds filter; phones (every browser) get a gentler set baked in, chosen
+                 natively by <source media>; desktop Safari drops filters on playing video, so it gets the desktop set baked (tools/bake_reeds.py).
+                 The poster is a CSS background so it can follow the same split. -->
+            <video class="hero-video" muted loop playsinline autoplay preload="auto" data-hero-video>
+              <source src="/hero/silhouette-reeds-sm.mp4" type="video/mp4" media="(max-width: 820px)" />
+              <source src="/hero/silhouette.mp4" type="video/mp4" />
+            </video>
             <script is:inline>
-              /* WebKit (Safari, and every iOS browser) drops CSS `filter: url(#reeds)` once a video plays: serve the reeds baked in (tools/bake_reeds.py) and switch the live filter off */
-              (function () { var u = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(u) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-                var safari = /Safari/.test(u) && !/Chrome|Chromium|CriOS|Edg|OPR|Android/.test(u);
-                if (!(ios || safari || /[?&]glass=baked/.test(location.search))) return;
-                var v = document.querySelector('[data-hero-video]'); v.parentNode.classList.add('baked');
-                v.poster = '/hero/silhouette-reeds-poster.jpg'; v.src = '/hero/silhouette-reeds.mp4'; })();
+              (function () { var u = navigator.userAgent, safari = /Safari/.test(u) && !/Chrome|Chromium|CriOS|Edg|OPR|Android/.test(u);
+                if (!(safari || /[?&]glass=baked/.test(location.search)) || matchMedia('(max-width: 820px)').matches) return;
+                var v = document.querySelector('[data-hero-video]'); v.parentNode.classList.add('baked'); v.src = '/hero/silhouette-reeds.mp4'; })();
             </script>
           </div>
           <span class="grain" aria-hidden="true"></span>
@@ -100,6 +105,7 @@ const filters = [{ id: 'reeds', g: glass }, { id: 'reeds-sm', g: glassSm }];
             <div class="card-info">
               <h3 class="h3">{p.title}</h3>
               <p class="card-line">{p.line}</p>
+              <span class="card-go">Read the case study</span>
               <dl class="spec mono">{p.rows.map(([k, v]) => <div><dt class="muted">{k}</dt><dd>{v}</dd></div>)}</dl>
             </div>
             <figure class="card-media dimg" style={`view-transition-name: cover-${p.slug}`}>
@@ -150,7 +156,8 @@ const filters = [{ id: 'reeds', g: glass }, { id: 'reeds-sm', g: glassSm }];
     background: radial-gradient(34% 48% at 64% 58%, rgba(239,162,60,.30), transparent 70%),
                 radial-gradient(28% 70% at 62% 70%, rgba(20,24,23,1) 40%, transparent 72%),
                 radial-gradient(70% 80% at 40% 30%, rgba(141,176,166,.16), transparent 70%), #101312; }
-  .hero-video { position: absolute; left: 6%; top: 6%; width: 88%; height: 88%; object-fit: cover; }  /* frame-media bleeds 10% for the reeds; the video overshoots the frame a little so the glass never pulls in an empty edge */
+  .hero-video { position: absolute; left: 6%; top: 6%; width: 88%; height: 88%; object-fit: cover; background: url(/hero/silhouette-poster.jpg) center / cover; }
+  .baked .hero-video { background-image: url(/hero/silhouette-reeds-poster.jpg); }  /* frame-media bleeds 10% for the reeds; the video overshoots the frame a little so the glass never pulls in an empty edge */
   /* film grain over the footage; a CSS layer, because noise baked into the video costs ~10 MB */
   .grain { position: absolute; inset: -50%; pointer-events: none; opacity: .22; mix-blend-mode: screen;
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
@@ -161,7 +168,9 @@ const filters = [{ id: 'reeds', g: glass }, { id: 'reeds-sm', g: glassSm }];
   .frame-media.baked { filter: none; }  /* WebKit: the reeds are baked into the video */
   .twin { position: absolute; left: calc((1 - 1 / var(--fw)) * 100%); width: calc(100% / var(--fw)); top: calc(var(--fs) * (var(--overlap) - 2 * var(--lh))); color: var(--paper); filter: url(#reeds); pointer-events: none; }
   @media (max-width: 820px) {
-    .frame-media, .twin { filter: url(#reeds-sm); }
+    .frame-media { filter: none; }  /* phones play the baked reeds (silhouette-reeds-sm) */
+    .hero-video { background-image: url(/hero/silhouette-reeds-sm-poster.jpg); }
+    .grain { animation: none; opacity: .12; }  /* on a small frame the jumping grain reads as flicker: keep it still and faint */
     .hero { padding-top: 96px; }
     .stage { --fs: clamp(44px, 12.4vw, 80px); order: -1; }
     .hero-h .ln, .hero-h :global(.line) { white-space: normal; }
@@ -191,6 +200,13 @@ const filters = [{ id: 'reeds', g: glass }, { id: 'reeds-sm', g: glassSm }];
   .spec dd { margin: 0; }
   .card-media { grid-column: 5 / -1; }
   .card-in:hover .card-media { outline: 1.5px solid var(--signal); outline-offset: -1.5px; }
+  /* quiet cue that the card opens: a short rule under the label draws full width on hover; the cover eases in */
+  .card-go { align-self: flex-start; padding-bottom: 3px; font-weight: 500; color: var(--ink);
+    background: linear-gradient(currentColor, currentColor) left bottom / 24px 1px no-repeat; transition: background-size var(--d-s) var(--ease-snap); }
+  .card-in:hover .card-go, .card-in:focus-visible .card-go { background-size: 100% 1px; }
+  .card-media img { transition: transform var(--d-m) var(--ease-out); }
+  .card-in:hover .card-media img { transform: scale(1.025); }
+  @media (prefers-reduced-motion: reduce) { .card-in:hover .card-media img { transform: none; } }
   @media (max-width: 820px) {
     .card { position: relative; top: 0; }
     .card-info, .card-media { grid-column: 1 / -1; } .card-media { aspect-ratio: 4 / 3; margin-top: var(--s3); }
@@ -217,5 +233,5 @@ const filters = [{ id: 'reeds', g: glass }, { id: 'reeds-sm', g: glassSm }];
   if (v && matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); }
   // DEMO switch while the look is undecided: ?look=dither4 | ?look=demo (remove once chosen)
   const look = new URLSearchParams(location.search).get("look");
-  if (v && look && /^[a-z0-9]+$/.test(look)) { v.poster = `/hero/${look}-poster.jpg`; v.src = `/hero/${look}.mp4`; }
+  if (v && look && /^[a-z0-9]+$/.test(look)) { v.style.backgroundImage = `url(/hero/${look}-poster.jpg)`; v.src = `/hero/${look}.mp4`; }
 </script>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ASCII ground tiles</title>
+<!-- Renders public/tex-l.webp and public/tex-d.webp (the faint glyph texture on every ground, base.css .ground::before).
+     Serve the repo root (uv run --no-project python -m http.server 8137) and run: node tools/tex-tiles.mjs -->
+<style>
+  @font-face { font-family: "JetBrains Mono Variable"; src: url(/node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2) format("woff2"); font-weight: 100 800; }
+</style>
+</head>
+<body>
+<pre id="out"></pre>
+<script>
+(async () => {
+  await document.fonts.load('400 10px "JetBrains Mono Variable"', '.·:-=+*#');
+  const CW = 8, CH = 14, COLS = 40, ROWS = 24, W = CW * COLS, H = CH * ROWS, DPR = 2;
+  const RAMP = '.·:-=+*#';  // escaped on purpose: the old tiles read this as Latin-1 and drew stray "Â" glyphs
+  let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const LX = 8, LY = 6, lat = Array.from({ length: LX * LY }, rnd);
+  const at = (i, j) => lat[((j % LY) + LY) % LY * LX + ((i % LX) + LX) % LX];
+  const sm = (t) => t * t * (3 - 2 * t);
+  const noise = (x, y) => { const i = Math.floor(x), j = Math.floor(y), u = sm(x - i), v = sm(y - j);
+    const a = at(i, j) + (at(i + 1, j) - at(i, j)) * u, b = at(i, j + 1) + (at(i + 1, j + 1) - at(i, j + 1)) * u; return a + (b - a) * v; };
+  const cells = [];
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const v = noise((c / COLS) * LX, (r / ROWS) * LY) * 0.75 + rnd() * 0.25;
+    const k = Math.floor(((v - 0.5) / 0.5) * RAMP.length);
+    if (k >= 0) cells.push([c, r, RAMP[Math.min(k, RAMP.length - 1)], v]);
+  }
+  const tile = (rgb, alpha) => {
+    const cv = document.createElement('canvas'); cv.width = W * DPR; cv.height = H * DPR;
+    const g = cv.getContext('2d'); g.scale(DPR, DPR);
+    g.font = '400 10px "JetBrains Mono Variable", monospace'; g.textBaseline = 'top';
+    cells.forEach(([c, r, ch, v]) => { g.fillStyle = `rgba(${rgb},${(alpha * (0.5 + v * 0.5)).toFixed(3)})`; g.fillText(ch, c * CW, r * CH); });
+    return cv.toDataURL('image/png');
+  };
+  document.getElementById('out').textContent = JSON.stringify({ l: tile('11,12,12', 0.12), d: tile('231,233,230', 0.10) });
+  document.title = 'done';
+})();
+</script>
+</body>
+</html>

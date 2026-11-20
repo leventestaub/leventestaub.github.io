@@ -39,6 +39,7 @@ const ogImg = abs(`/og/${og}.jpg`);
   {Astro.site && <meta property="og:url" content={abs(Astro.url.pathname)} />}
   <meta name="twitter:card" content="summary_large_image" />
   <script is:inline>document.documentElement.classList.add('js')</script>
+  <slot name="head" />
   <ClientRouter fallback="swap" />
 </head>
 <body>
