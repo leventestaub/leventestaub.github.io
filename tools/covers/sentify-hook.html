@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Sentify cover: hook</title>
+<!-- The Sentify cover: one sentence of a commencement speech (the advert's demo scenario, public/work/sentify/advert.mp4),
+     classified the way Sentify does it: per sentence. Synthetic text, never client data. Built in the site's own system:
+     tokens.css colours, Host Grotesk .display type, and the .tick detection-box marker (orange = model mark only, as
+     .tick.signal on the site). Flat: no glow, gradient, grid or rounded chips. Serve the repo root and shoot both ratios:
+     MSYS_NO_PATHCONV=1 node tools/frames.mjs --root . --page "/tools/covers/sentify-hook.html?r=16x10" --w 1600 --h 1000 --dpr 1.6 --png 1 --out /tmp/sc/16x10
+     (16x9: ?r=16x9 --h 900), then sharp -> public/covers/sentify-hook-<r>.webp (q88) and node tools/cover_sizes.mjs.
+     Phone cards show the left ~800 px of the 16x10, so the sentence sits inside x < 800. -->
+<style>
+  @font-face { font-family: "Host Grotesk"; src: url(/node_modules/@fontsource-variable/host-grotesk/files/host-grotesk-latin-wght-normal.woff2) format("woff2"); font-weight: 300 800; }
+  @font-face { font-family: "JetBrains Mono"; src: url(/node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2) format("woff2"); font-weight: 100 800; }
+  /* src/styles/tokens.css */
+  :root { --paper: #E7E9E6; --ink: #0B0C0C; --mute-d: #8E9490; --line-d: #262928; --signal: #EFA23C; }
+  html, body { margin: 0; background: var(--ink); }
+  .c { position: relative; width: 1600px; height: 1000px; overflow: hidden; background: var(--ink); color: var(--paper); font-family: "Host Grotesk", sans-serif; }
+  .r169 .c { height: 900px; }
+  .mono { font: 400 26px/1 "JetBrains Mono", monospace; letter-spacing: 0; }
+  /* base.css .tick, scaled for a 1600 px frame */
+  .tick { --t: 12px; --w: 2px; --c: currentColor; position: relative; display: inline-block; }
+  .tick::before { content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(var(--c),var(--c)) top left / var(--t) var(--w), linear-gradient(var(--c),var(--c)) top left / var(--w) var(--t),
+      linear-gradient(var(--c),var(--c)) top right / var(--t) var(--w), linear-gradient(var(--c),var(--c)) top right / var(--w) var(--t),
+      linear-gradient(var(--c),var(--c)) bottom left / var(--t) var(--w), linear-gradient(var(--c),var(--c)) bottom left / var(--w) var(--t),
+      linear-gradient(var(--c),var(--c)) bottom right / var(--t) var(--w), linear-gradient(var(--c),var(--c)) bottom right / var(--w) var(--t);
+    background-repeat: no-repeat; }
+  .meta { position: absolute; left: 112px; top: 96px; display: flex; gap: 40px; color: var(--mute-d); }
+  .meta span:first-child { color: var(--paper); }
+  /* the classified sentence: an orange detection box, its label riding the top edge */
+  .hit { position: absolute; left: 80px; top: 250px; padding: 30px 34px 40px 32px; --t: 30px; --w: 4px; --c: var(--signal); }
+  .hit .lab { position: absolute; left: 0; top: -44px; color: var(--signal); font-size: 28px; }
+  h1 { margin: 0; font-weight: 700; font-size: 128px; line-height: .9; letter-spacing: -.045em; font-variation-settings: "wght" 700; }
+  h1 span { display: block; }
+  .rest { position: absolute; left: 112px; top: 650px; font-size: 40px; line-height: 1; letter-spacing: -.01em; color: var(--mute-d); display: grid; gap: 26px; }
+  .rest div { display: flex; align-items: center; gap: 24px; }
+  .rest div:nth-child(2) { color: #5B605D; }
+  .rest .tick { --t: 8px; --w: 1.5px; font-size: 22px; padding: 7px 13px; }
+</style>
+</head>
+<body>
+<div class="c">
+  <div class="meta mono"><span>00:41</span><span>Commencement speech</span></div>
+  <div class="hit tick"><span class="lab mono">joy</span><h1><span>We actually</span><span>made it.</span></h1></div>
+  <div class="rest">
+    <div>I was terrified on day one.<span class="tick mono">fear</span></div>
+    <div>Look at us now.<span class="tick mono">joy</span></div>
+  </div>
+</div>
+<script>
+  if (new URLSearchParams(location.search).get('r') === '16x9') document.documentElement.classList.add('r169');
+  document.fonts.ready.then(() => { document.title = 'done'; });
+</script>
+</body>
+</html>

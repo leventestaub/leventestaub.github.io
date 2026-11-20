@@ -41,7 +41,7 @@ try {
   ws = new WebSocket(targets.find((t) => t.type === 'page').webSocketDebuggerUrl);
   await new Promise((r) => ws.addEventListener('open', r));
   ws.addEventListener('message', (e) => { const m = JSON.parse(e.data); if (m.id && pending.has(m.id)) { pending.get(m.id)(m.result ?? { error: m.error }); pending.delete(m.id); } });
-  await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: W < 600 });
+  await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: +arg('dpr', 1), mobile: W < 600 });
   console.error("nav", JSON.stringify(await send("Page.navigate", { url: `http://127.0.0.1:${port}${page}` })));
   await sleep(2500);
   let mx = 0, my = 0;
@@ -55,7 +55,7 @@ try {
       mx = x; my = yy;
       if (kind === 'click') { for (const type of ['mousePressed', 'mouseReleased']) await send('Input.dispatchMouseEvent', { type, x, y: yy, button: 'left', clickCount: 1 }); }
       await sleep(1400);
-      const { data } = await send('Page.captureScreenshot', { format: 'jpeg', quality: 82 });
+      const { data } = await send('Page.captureScreenshot', (arg('png') ? { format: 'png' } : { format: 'jpeg', quality: 82 }));
       const f = path.join(out, `frame-${String(k + 1).padStart(2, '0')}.jpg`);
       fs.writeFileSync(f, Buffer.from(data, 'base64')); console.log('saved', f, kind, v); continue;
     }
@@ -65,7 +65,7 @@ try {
     // step there so scroll-linked code sees intermediate positions, then let scrub settle
     await evalJs(`(async () => { const t = ${Math.round(y)}; for (let i = 1; i <= 12; i++) { scrollTo(0, scrollY + (t - scrollY) * i / 12); await new Promise(r => setTimeout(r, 30)); } scrollTo(0, t); })()`);
     await sleep(1600);
-    const { data } = await send('Page.captureScreenshot', { format: 'jpeg', quality: 82 });
+    const { data } = await send('Page.captureScreenshot', (arg('png') ? { format: 'png' } : { format: 'jpeg', quality: 82 }));
     const f = path.join(out, `frame-${String(k + 1).padStart(2, '0')}.jpg`);
     fs.writeFileSync(f, Buffer.from(data, 'base64')); console.log('saved', f, 'y=', Math.round(y));
   }

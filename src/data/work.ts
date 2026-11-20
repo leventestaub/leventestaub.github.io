@@ -39,7 +39,7 @@ export const work: Project[] = [
     rows: [['Task', 'Emotion classification'], ['My part', 'Retraining, registration gate, canary and blue-green rollout'], ['Stack', 'Azure ML, MLflow, Docker'], ['Team', 'Group project']],
     meta: [['Role', 'Model lifecycle'], ['Team', 'Group project'], ['Period', 'Apr–Jun 2026'], ['Stack', 'Azure ML, MLflow, Airflow, FastAPI']],
     result: 'Macro F1 0.84 (validation)',
-    cover: '/covers/sentify-labelled-16x10.webp', coverPos: '0% 50%', coverWide: '/covers/sentify-labelled-16x9.webp',
+    cover: '/covers/sentify-hook-16x10.webp', coverPos: '0% 50%', coverWide: '/covers/sentify-hook-16x9.webp',
     pipeline: ['Transcribe', 'Classify', 'Collect corrections', 'Retrain', 'Gate', 'Roll out'],
     metrics: [
       { value: 0.84, decimals: 2, label: 'Macro F1 on validation' },
