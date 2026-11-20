@@ -38,7 +38,7 @@ const cards = [
   { name: 'work', tick: 'Work', title: 'Selected work', line: `${work.length} projects in computer vision, ML engineering, MLOps and LLMs.` },
   { name: 'about', tick: 'About', title: 'About', line: 'Data Science and AI student at BUas, looking for a graduation internship from February 2027.' },
   { name: 'contact', tick: 'Contact', title: 'Get in touch', line: 'Graduation internship from February 2027.' },
-  ...work.map((p) => ({ name: p.slug, tick: `Case study, ${p.year}`, title: p.title, line: p.result, img: p.cover })),
+  ...work.map((p) => ({ name: p.slug, tick: `Case study, ${p.year}`, title: p.title, line: p.result, img: p.cover, pos: p.coverPos })),
 ];
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const html = (c) => `<!doctype html><meta charset="utf-8"><style>
@@ -56,7 +56,7 @@ p{font-size:28px;line-height:1.25;color:${C.mute};max-width:${c.img ? 560 : 820}
 .img{background:${C.ink} center/cover no-repeat}
 </style><div class="t"><div class="top"><span class="mk">${icon(36)}Levente Staub</span><span class="tick">${esc(c.tick)}</span></div>
 <div><h1>${esc(c.title)}</h1><p>${esc(c.line)}</p></div></div>
-${c.img ? `<div class="img" style="background-image:url(${c.img})"></div>` : ''}`;
+${c.img ? `<div class="img" style="background-image:url(${c.img})${c.pos ? `;background-position:${c.pos}` : ""}"></div>` : ''}`;
 
 const fonts = { '/__f/host.woff2': 'node_modules/@fontsource-variable/host-grotesk/files/host-grotesk-latin-wght-normal.woff2',
   '/__f/mono.woff2': 'node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2' };

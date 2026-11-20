@@ -24,8 +24,13 @@ const ratio = (r?: string) => (r ?? '16:9').replace(':', ' / ');
 {f.kind === 'chart' && <figure class:list={['fig', 'fig-chart', { wide: f.wide }]} set:html={svg} />}
 
 {f.kind === 'image' && (
-  <figure class:list={['fig', 'fig-img', { wide: f.wide }]} style={`aspect-ratio:${ratio(f.ratio)}`}>
-    <img src={f.src} srcset={set(f.src)} sizes={sizes} alt={f.alt} loading="lazy" decoding="async" />
+  <figure class:list={['fig', 'fig-img', { wide: f.wide }]} style={`aspect-ratio:${ratio(f.ratio)}${f.small ? `;--r-sm:${ratio(f.small.ratio)}` : ''}`}>
+    {f.small ? (
+      <picture>
+        <source media="(max-width: 820px)" srcset={`${phone(f.small.src)} 720w, ${f.small.src} 1250w`} sizes="92vw" />
+        <img src={f.src} srcset={set(f.src)} sizes={sizes} alt={f.alt} loading="lazy" decoding="async" />
+      </picture>
+    ) : <img src={f.src} srcset={set(f.src)} sizes={sizes} alt={f.alt} loading="lazy" decoding="async" />}
   </figure>
 )}
 
@@ -66,6 +71,9 @@ const ratio = (r?: string) => (r ?? '16:9').replace(':', ' / ');
   .fig-vid.phone { display: grid; place-items: center; padding: 5% 0; }
   .fig-vid.phone video { width: auto; height: 100%; max-height: 844px; aspect-ratio: 390 / 844; object-fit: contain; border-radius: 14px; }
   .fig-img img { transition: transform .6s var(--ease, ease); }
+  .fig-img picture { display: contents; }
+  /* a figure with a stacked portrait take switches to its shape on phones */
+  @media (max-width: 820px) { .fig-img[style*="--r-sm"] { aspect-ratio: var(--r-sm) !important; } }
 
   .fig-cmp > img { position: absolute; inset: 0; }
   .cmp-after { clip-path: inset(0 0 0 var(--x, 50%)); }

@@ -56,7 +56,7 @@ const filters = [{ id: 'reeds', g: glass }];
         <div class="frame" data-hero-media>
           <!-- MEDIA SLOT (not locked): footage behind glass, or a cut of project outputs. Stand-in below. -->
           <div class="frame-media" aria-hidden="true">
-            <!-- DEMO (2026-11-19): test take as a silhouette, square crop round the subject, 8.75 s loop at 0.8x speed; built by tools/hero-video.sh. Compare: ?look=dither4 | ?look=demo -->
+            <!-- silhouette take (chosen 2026-11-20): square crop round the subject, 8.75 s loop at 0.8x speed; built by tools/hero-video.sh -->
             <!-- glass: desktop Chrome/Edge/Firefox use the live #reeds filter; phones (every browser) get the desktop set baked in (1080 px), chosen
                  natively by <source media>; desktop Safari drops filters on playing video, so it gets the desktop set baked (tools/bake_reeds.py).
                  The poster is a CSS background so it can follow the same split. -->
@@ -251,7 +251,4 @@ const filters = [{ id: 'reeds', g: glass }];
     new ResizeObserver(fit).observe(frame); fit();
   }
   });
-  // DEMO switch while the look is undecided: ?look=dither4 | ?look=demo (remove once chosen)
-  const look = new URLSearchParams(location.search).get("look");
-  if (v && look && /^[a-z0-9]+$/.test(look)) { v.style.backgroundImage = `url(/hero/${look}-poster.jpg)`; v.src = `/hero/${look}.mp4`; }
 </script>

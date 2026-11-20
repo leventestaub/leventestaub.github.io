@@ -34,20 +34,29 @@
   .hit { position: absolute; left: 80px; top: 250px; padding: 30px 34px 40px 32px; --t: 30px; --w: 4px; --c: var(--signal); }
   .hit .lab { position: absolute; left: 0; top: -44px; color: var(--signal); font-size: 28px; }
   h1 { margin: 0; font-weight: 700; font-size: 128px; line-height: .9; letter-spacing: -.045em; font-variation-settings: "wght" 700; }
-  h1 span { display: block; }
+  h1 > span { display: block; }
+  i { font-style: normal; }
   .rest { position: absolute; left: 112px; top: 650px; font-size: 40px; line-height: 1; letter-spacing: -.01em; color: var(--mute-d); display: grid; gap: 26px; }
   .rest div { display: flex; align-items: center; gap: 24px; }
   .rest div:nth-child(2) { color: #5B605D; }
   .rest .tick { --t: 8px; --w: 1.5px; font-size: 22px; padding: 7px 13px; }
+  /* "why this label": the words the model leaned on, as in the advert's explanation step. Flat signal blocks,
+     solid for the strongest attribution, a tint for the weaker one (orange stays a model mark) */
+  .w { padding: 0 .07em; margin: 0 -.02em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .w { --hc: var(--signal); background: linear-gradient(var(--hc), var(--hc)) 0 64% / 100% 64% no-repeat; }
+  .w1 { color: var(--ink); }
+  .w2 { --hc: rgba(239,162,60,.3); }
+  .rest .w { background-size: 100% 96%; background-position: 0 55%; }
+  .rest .w2 { --hc: rgba(239,162,60,.24); color: var(--paper); }
 </style>
 </head>
 <body>
 <div class="c">
-  <div class="meta mono"><span>00:41</span><span>Commencement speech</span></div>
-  <div class="hit tick"><span class="lab mono">joy</span><h1><span>We actually</span><span>made it.</span></h1></div>
+  <div class="meta mono"><span>00:41</span><span>Commencement speech</span><span>Why this label</span></div>
+  <div class="hit tick"><span class="lab mono">joy</span><h1><span>We <i class="w w2">actually</i></span><span><i class="w w1">made it</i>.</span></h1></div>
   <div class="rest">
-    <div>I was terrified on day one.<span class="tick mono">fear</span></div>
-    <div>Look at us now.<span class="tick mono">joy</span></div>
+    <div><span>I was <i class="w w1">terrified</i> on <i class="w w2">day one</i>.</span><span class="tick mono">fear</span></div>
+    <div><span><i class="w w2">Look at us</i> now.</span><span class="tick mono">joy</span></div>
   </div>
 </div>
 <script>
