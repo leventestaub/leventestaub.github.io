@@ -7,6 +7,9 @@ import type { Figure } from '../data/work';
 interface Props { f: Figure }
 const { f } = Astro.props;
 const small = (src: string) => src.replace(/\.webp$/, '-1200.webp');
+const phone = (src: string) => src.replace(/\.webp$/, '-720.webp');   // tools/cover_sizes.mjs
+const set = (src: string) => exists(small(src)) ? `${exists(phone(src)) ? `${phone(src)} 720w, ` : ''}${small(src)} 1200w, ${src} 2400w` : undefined;
+const sizes = '(max-width: 820px) 92vw, 60vw';   // figures sit inside the wrap padding on a phone
 const exists = (src: string) => fs.existsSync(path.join(process.cwd(), 'public', src));
 let svg = '';
 if (f.kind === 'chart') {
@@ -22,15 +25,14 @@ const ratio = (r?: string) => (r ?? '16:9').replace(':', ' / ');
 
 {f.kind === 'image' && (
   <figure class:list={['fig', 'fig-img', { wide: f.wide }]} style={`aspect-ratio:${ratio(f.ratio)}`}>
-    <img src={f.src} srcset={exists(small(f.src)) ? `${small(f.src)} 1200w, ${f.src} 2400w` : undefined}
-      sizes="(max-width: 820px) 100vw, 60vw" alt={f.alt} loading="lazy" decoding="async" />
+    <img src={f.src} srcset={set(f.src)} sizes={sizes} alt={f.alt} loading="lazy" decoding="async" />
   </figure>
 )}
 
 {f.kind === 'compare' && (
   <figure class:list={['fig', 'fig-cmp', { wide: f.wide }]} style={`aspect-ratio:${ratio(f.ratio)}`} data-compare>
-    <img src={f.before} alt={f.alt} loading="lazy" decoding="async" />
-    <img class="cmp-after" src={f.after} alt="" loading="lazy" decoding="async" />
+    <img src={f.before} srcset={set(f.before)} sizes={sizes} alt={f.alt} loading="lazy" decoding="async" />
+    <img class="cmp-after" src={f.after} srcset={set(f.after)} sizes={sizes} alt="" loading="lazy" decoding="async" />
     <span class="cmp-bar" aria-hidden="true"></span>
     <span class="cmp-lab mono l" aria-hidden="true">{f.labels[0]}</span>
     <span class="cmp-lab mono r" aria-hidden="true">{f.labels[1]}</span>

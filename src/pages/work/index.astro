@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { work, focusAreas } from '../../data/work';
+import { work, focusAreas, coverSet } from '../../data/work';
 // Work index = two parts (2026-11-19):
 // 1. Selected: Expanding Strip (Annnimate, rebuilt) for the featured 3-4. JS owns the open panel (.on): it follows the
 //    pointer with a settle lock, so a panel that grows under a still cursor cannot hand the hover to its neighbour.
@@ -28,7 +28,7 @@ const stack = (p: (typeof work)[number]) => p.rows.find(([k]) => k === 'Stack')?
         <li class:list={['panel', { on: i === 0 }]} data-panel>
           <a class="panel-a" href={`/work/${p.slug}`} aria-label={`${p.title}: ${p.line}`}>
             <figure class="dimg panel-img" style={`view-transition-name: cover-${p.slug}`}>
-              <img src={p.cover} style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" decoding="async" loading={i === 0 ? 'eager' : 'lazy'} />
+              <img src={p.cover} srcset={coverSet(p.cover)} sizes="(max-width: 820px) 92vw, 70vw" style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" decoding="async" loading={i === 0 ? 'eager' : 'lazy'} />
             </figure>
             <span class="shade" aria-hidden="true"></span>
             <span class="p-top mono"><span>{pad(i + 1)}</span><span>{p.year}</span></span>
@@ -75,7 +75,7 @@ const stack = (p: (typeof work)[number]) => p.rows.find(([k]) => k === 'Stack')?
         <li class="it" data-item data-focus={p.focus.map(slug).join(' ')}>
           <a class="it-a" href={`/work/${p.slug}`}>
             <figure class="dimg it-img">
-              <img src={p.cover} style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" loading="lazy" decoding="async" />
+              <img src={p.cover} srcset={coverSet(p.cover)} sizes="(max-width: 820px) 92vw, 34vw" style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" loading="lazy" decoding="async" />
             </figure>
             <span class="it-year mono muted">{p.year}</span>
             <span class="it-title h3"><span class="it-u">{p.title}</span></span>

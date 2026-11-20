@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { work as all } from '../data/work';
+import { work as all, coverSet } from '../data/work';
 const work = all.filter((p) => p.featured); // home shows the featured three; all projects live on /work
 // All copy is placeholder: the user writes the final wording. Facts only from profile/master-profile.md.
 const focus = [
@@ -24,8 +24,8 @@ const filters = [{ id: 'reeds', g: glass }];
 ---
 <Base title="Levente Staub, machine learning engineer">
   <!-- the hero poster is the LCP: fetch it early, one per breakpoint -->
-  <link slot="head" rel="preload" as="image" href="/hero/silhouette-reeds-sm-poster.jpg" media="(max-width: 820px)" fetchpriority="high" />
-  <link slot="head" rel="preload" as="image" href="/hero/silhouette-poster.jpg" media="(min-width: 821px)" fetchpriority="high" />
+  <link slot="head" rel="preload" as="image" href="/hero/silhouette-reeds-sm-poster.webp" media="(max-width: 820px)" fetchpriority="high" />
+  <link slot="head" rel="preload" as="image" href="/hero/silhouette-poster.webp" media="(min-width: 821px)" fetchpriority="high" />
   <!-- reeded-glass filter, used only in the hero frame on desktop -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     {filters.map(({ id, g }) => (
@@ -110,7 +110,7 @@ const filters = [{ id: 'reeds', g: glass }];
             </div>
             <figure class="card-media dimg" style={`view-transition-name: cover-${p.slug}`}>
               <!-- COVER SLOT: re-rendered project output (assets.md). Procedural stand-in until then. -->
-              <img src={p.cover} style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" loading="lazy" decoding="async" />
+              <img src={p.cover} srcset={coverSet(p.cover)} sizes="(max-width: 820px) 92vw, 50vw" style={p.coverPos && `object-position: ${p.coverPos}`} alt="" width="2560" height="1600" loading="lazy" decoding="async" />
             </figure>
           </a>
         </article>
@@ -156,8 +156,8 @@ const filters = [{ id: 'reeds', g: glass }];
     background: radial-gradient(34% 48% at 64% 58%, rgba(239,162,60,.30), transparent 70%),
                 radial-gradient(28% 70% at 62% 70%, rgba(20,24,23,1) 40%, transparent 72%),
                 radial-gradient(70% 80% at 40% 30%, rgba(141,176,166,.16), transparent 70%), #101312; }
-  .hero-video { position: absolute; left: 6%; top: 6%; width: 88%; height: 88%; object-fit: cover; background: url(/hero/silhouette-poster.jpg) center / cover; }
-  .baked .hero-video { background-image: url(/hero/silhouette-reeds-poster.jpg); }  /* frame-media bleeds 10% for the reeds; the video overshoots the frame a little so the glass never pulls in an empty edge */
+  .hero-video { position: absolute; left: 6%; top: 6%; width: 88%; height: 88%; object-fit: cover; background: url(/hero/silhouette-poster.webp) center / cover; }
+  .baked .hero-video { background-image: url(/hero/silhouette-reeds-poster.webp); }  /* frame-media bleeds 10% for the reeds; the video overshoots the frame a little so the glass never pulls in an empty edge */
   /* film grain over the footage; a CSS layer, because noise baked into the video costs ~10 MB */
   .grain { position: absolute; inset: -50%; pointer-events: none; opacity: .22; mix-blend-mode: screen;
     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
@@ -169,7 +169,7 @@ const filters = [{ id: 'reeds', g: glass }];
   .twin { position: absolute; left: calc((1 - 1 / var(--fw)) * 100%); width: calc(100% / var(--fw)); top: calc(var(--fs) * (var(--overlap) - 2 * var(--lh))); color: var(--paper); filter: url(#reeds); pointer-events: none; }
   @media (max-width: 820px) {
     .frame-media { filter: none; }  /* phones play the baked reeds (silhouette-reeds-sm) */
-    .hero-video { background-image: url(/hero/silhouette-reeds-sm-poster.jpg); }
+    .hero-video { background-image: url(/hero/silhouette-reeds-sm-poster.webp); }
     .grain { animation: none; opacity: .12; }  /* on a small frame the jumping grain reads as flicker: keep it still and faint */
     .hero { padding-top: 96px; }
     .stage { --fs: clamp(44px, 12.4vw, 80px); order: -1; }

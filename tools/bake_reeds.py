@@ -39,4 +39,4 @@ wr = iio.get_writer(f"public/hero/{P['out']}.mp4", fps=meta['fps'], codec='libx2
 first = None
 for f in rd:
     g = glass(f); first = g if first is None else first; wr.append_data(g)
-wr.close(); iio.imwrite(f"public/hero/{P['out']}-poster.jpg", first, quality=85); print(P)
+wr.close(); iio.imwrite(f"public/hero/{P['out']}-poster.webp", first, quality=94); print(P)

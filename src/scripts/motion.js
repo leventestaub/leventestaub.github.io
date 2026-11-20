@@ -3,10 +3,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { CustomEase } from 'gsap/CustomEase';
-import { Flip } from 'gsap/Flip';
 import Lenis from 'lenis';
 
-gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase, Flip);
+gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
 CustomEase.create('out', '.16,1,.3,1');
 CustomEase.create('inout', '.65,0,.35,1');
 CustomEase.create('snap', '.3,0,0,1');
@@ -237,13 +236,16 @@ function expandingStrip() {
 function workIndex() {
   const list = document.querySelector('[data-index]');
   if (!list) return;
+  // Flip only lives on /work, so it loads here, not in the shared bundle; until it arrives a filter just snaps
+  let Flip = null;
+  import('gsap/Flip').then((m) => { gsap.registerPlugin(m.Flip); Flip = m.Flip; });
   const items = [...list.querySelectorAll('[data-item]')];
   const chips = [...document.querySelectorAll('[data-filter]')];
   const views = [...document.querySelectorAll('[data-view-btn]')];
   const empty = document.querySelector('[data-empty]');
   const press = (btns, on) => btns.forEach((b) => b.setAttribute('aria-pressed', String(b === on)));
   const apply = (change) => {
-    if (reduce.matches) { change(); ScrollTrigger.refresh(); return; }
+    if (reduce.matches || !Flip) { change(); ScrollTrigger.refresh(); return; }
     const state = Flip.getState(items, { props: 'opacity' });
     change();
     Flip.from(state, { targets: items, duration: .6, ease: 'inout', absolute: true, stagger: .025, nested: true, scale: false,

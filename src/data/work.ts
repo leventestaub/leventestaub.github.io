@@ -13,6 +13,8 @@ export interface Chapter { id: string; title: string; body: string[]; figures?: 
 export interface Metric { value: number; decimals: number; prefix?: string; suffix?: string; label: string }
 export type Focus = 'Computer vision' | 'ML engineering' | 'MLOps' | 'LLM';
 export const focusAreas: Focus[] = ['Computer vision', 'ML engineering', 'MLOps', 'LLM'];
+// srcset for a cover: the sized copies from tools/cover_sizes.mjs plus the 2560 original
+export const coverSet = (src: string) => [640, 1280, 1920].map((w) => src.replace(/\.webp$/, '-' + w + '.webp') + ' ' + w + 'w').concat(src + ' 2560w').join(', ');
 export interface Project {
   slug: string; title: string; line: string; year: string;
   rows: [string, string][];          // model-card spec (home cards)
