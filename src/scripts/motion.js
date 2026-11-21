@@ -247,7 +247,15 @@ function workIndex() {
   const apply = (change) => {
     if (reduce.matches || !Flip) { change(); ScrollTrigger.refresh(); return; }
     const state = Flip.getState(items, { props: 'opacity' });
+    // absolute: true lifts the items out of flow while they fly, so the list would collapse at once and the
+    // footer jump up; hold the old height and ease it to the new one alongside the cards instead
+    gsap.killTweensOf(list, 'height');
+    const h0 = list.offsetHeight;
+    gsap.set(list, { clearProps: 'height' });
     change();
+    const h1 = list.offsetHeight;
+    const dur = .6 + .025 * (items.length - 1);
+    gsap.fromTo(list, { height: h0 }, { height: h1, duration: dur, ease: 'inout', clearProps: 'height' });
     Flip.from(state, { targets: items, duration: .6, ease: 'inout', absolute: true, stagger: .025, nested: true, scale: false,
       onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: .94 }, { opacity: 1, scale: 1, duration: .5, ease: 'out', delay: .15 }),
       onLeave: (els) => gsap.to(els, { opacity: 0, scale: .94, duration: .3, ease: 'out' }),
